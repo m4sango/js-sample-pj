@@ -9,7 +9,7 @@ export default function BoardDetail(props) {
 
   document.title = props.match.params.title;
 
-  const addList = (title) => {
+  const handleAddNewList = (title) => {
     const before = listTiles.slice();
     const after = before.concat([{ title: title }]);
     setListTiles(after);
@@ -25,7 +25,7 @@ export default function BoardDetail(props) {
         {listTiles.map((tile, index) => (
           <ListTile key={`${index}-${tile.title}`} tile={tile}></ListTile>
         ))}
-        <ListCreate onClickAddList={addList}></ListCreate>
+        <ListCreate onClickAddList={handleAddNewList}></ListCreate>
       </div>
     </div>
   );
