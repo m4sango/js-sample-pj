@@ -1,7 +1,48 @@
 import React, { useState } from "react";
 import "./ListTile.css";
+import {
+  makeStyles,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  CardActions,
+  Button,
+} from "@material-ui/core";
+
+const useStyles = makeStyles({
+  listCard: {
+    width: "30vw",
+    minWidth: "30vw",
+    height: "fit-content",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "lightblue",
+    justifyContent: "top",
+    alignItems: "center",
+    margin: "0 8px 0 0",
+  },
+
+  listTitle: {
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "1.3rem",
+    fontWeight: "bold",
+    color: "white",
+  },
+
+  cardInput: {
+    marginTop: "8px",
+  },
+
+  innerCard: {
+    margin: "8px auto",
+  },
+});
 
 export default function ListTile(props) {
+  const classes = useStyles();
+
   const [cardList, setCardList] = useState([]);
   const [cardTitle, setCardTitle] = useState("");
 
@@ -31,70 +72,34 @@ export default function ListTile(props) {
   };
 
   return (
-    <div className="list-wrapper">
-      <div className="list-contents">
-        <div className="list-header">
-          <h2 className="list-name">{props.tile.title}</h2>
-        </div>
-        <div className="card-list">
-          {cardList.map((card, index) => (
-            <Card key={`${index}-${card.title}`} card={card} />
-          ))}
-        </div>
-        <CardInput
-          title={cardTitle}
-          onChangeTitle={handleCardTitleChanges}
-          onClickCardAdd={handleOnClickCardAdd}
-          onClose={handleCloseCardInput}
-        ></CardInput>
-        <CardAdd onClickCardAdd={handleOpenCardInput} />
-      </div>
-    </div>
+    <Card className={classes.listCard}>
+      <CardContent>
+        <Typography className={classes.listTitle}>
+          {props.tile.title}
+        </Typography>
+        {cardList.map((card, index) => (
+          <Card key={`${index}-${card.title}`} className={classes.innerCard}>
+            <CardContent>
+              <Typography>{card.title}</Typography>
+            </CardContent>
+          </Card>
+        ))}
+
+        <TextField
+          className={classes.cardInput}
+          id="outlined-basic"
+          label=""
+          value={cardTitle}
+          variant="outlined"
+          placeholder="このカードにタイトルを入力..."
+          onChange={handleCardTitleChanges}
+        ></TextField>
+      </CardContent>
+      <CardActions>
+        <Button size="small" color="primary" onClick={handleOnClickCardAdd}>
+          カードを追加
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
-
-const Card = (props) => {
-  return (
-    <div className="card-details">
-      <span className="card-title">{props.card.title}</span>
-    </div>
-  );
-};
-
-const CardInput = (props) => {
-  return (
-    <div className="card-input">
-      <div className="card-input-field">
-        <textarea
-          className="card-input-title"
-          value={props.title}
-          placeholder="このカードにタイトルを入力..."
-          onChange={props.onChangeTitle}
-        ></textarea>
-      </div>
-      <div className="card-input-controls">
-        <input
-          className="card-add-submit"
-          type="submit"
-          onClick={props.onClickCardAdd}
-          value="カードを追加"
-        ></input>
-        <a className="card-input-close-button" href="#" onClick={props.onClose}>
-          X
-        </a>
-      </div>
-    </div>
-  );
-};
-
-const CardAdd = (props) => {
-  return (
-    <div className="card-add">
-      <a className="open-card-add" href="#" onClick={props.onClickCardAdd}>
-        <span className="card-add-icon"></span>
-        <span className="card-add-text">カードを追加</span>
-        <span className="card-add-text hide">さらにカードを追加</span>
-      </a>
-    </div>
-  );
-};

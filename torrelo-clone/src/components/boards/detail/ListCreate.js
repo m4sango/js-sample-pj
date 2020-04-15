@@ -1,15 +1,66 @@
 import React, { useState } from "react";
 import "./ListCreate.css";
+import {
+  makeStyles,
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  TextField,
+  CardActions,
+  Button,
+} from "@material-ui/core";
+
+const useStyles = makeStyles({
+  card: {
+    height: "30vh",
+    minHeight: "30vh",
+    width: "30vw",
+    minWidth: "30vw",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "lightblue",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  areaAdd: {
+    height: "100%",
+    width: "100%",
+  },
+  contentAdd: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+  },
+  addText: {
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+  },
+  contentWrapper: {
+    position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default function ListCreate(props) {
+  const classes = useStyles();
   const [listTitle, setListTitle] = useState("");
+  const [openInput, setOpenInput] = useState(false);
 
   const handleListNameInputChanges = (e) => {
     setListTitle(e.target.value);
   };
 
+  const handleOpenListCreate = () => {
+    setOpenInput(true);
+  };
+
   const handleCloseListCreate = () => {
-    // TODO
+    setOpenInput(false);
   };
 
   const handleOnClickAddList = (e) => {
@@ -20,6 +71,7 @@ export default function ListCreate(props) {
     }
 
     props.onClickAddList(listTitle);
+    setOpenInput(false);
     resetInputField();
   };
 
@@ -28,35 +80,43 @@ export default function ListCreate(props) {
   };
 
   return (
-    <div className="add-list">
-      <form>
-        <a href="#">
-          <span className="add-list-text">リストを追加</span>
-        </a>
-        <input
-          className="list-name-input"
-          type="text"
-          value={listTitle}
-          name="add-list-title"
-          placeholder="リストのタイトルを入力..."
-          onChange={handleListNameInputChanges}
-        ></input>
-        <div className="list-add-controls">
-          <input
-            className="list-add-button"
-            type="submit"
-            value="リストを追加"
-            onClick={handleOnClickAddList}
-          ></input>
-          <a
-            className="add-list-close-button"
-            href="#"
+    <Card className={classes.card}>
+      <CardActionArea
+        className={classes.areaAdd}
+        onClick={handleOpenListCreate}
+        style={{ visibility: openInput ? "hidden" : "visible" }}
+      >
+        <CardContent className={classes.contentAdd}>
+          <Typography className={classes.addText}>リストを追加</Typography>
+        </CardContent>
+      </CardActionArea>
+      <div
+        className={classes.contentWrapper}
+        style={{ visibility: openInput ? "visible" : "hidden" }}
+      >
+        <CardContent className={classes.content}>
+          <TextField
+            id="outlined-basic"
+            label=""
+            value={listTitle}
+            variant="outlined"
+            placeholder="リストのタイトルを入力..."
+            onChange={handleListNameInputChanges}
+          ></TextField>
+        </CardContent>
+        <CardActions>
+          <Button size="small" color="primary" onClick={handleOnClickAddList}>
+            リストを追加
+          </Button>
+          <Button
+            size="small"
+            color="secondary"
             onClick={handleCloseListCreate}
           >
-            X
-          </a>
-        </div>
-      </form>
-    </div>
+            キャンセル
+          </Button>
+        </CardActions>
+      </div>
+    </Card>
   );
 }
