@@ -51,12 +51,16 @@ const useStyles = makeStyles({
 export default function Boards() {
   const classes = useStyles();
 
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState(
+    JSON.parse(localStorage.getItem("boards"))
+  );
   const [open, setOpen] = useState(false);
 
   const handleOnCreate = (title) => {
     const list = boards.slice();
     list.push({ title: title, id: uuid() });
+
+    localStorage.setItem("boards", JSON.stringify(list));
 
     setBoards(list);
   };
