@@ -10,6 +10,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { connect } from "react-redux";
+import { addBoard } from "../../redux/actions";
 
 const useStyles = makeStyles({
   root: {
@@ -48,21 +50,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Boards() {
+const Boards = ({ boards, addBoard }) => {
+  console.log("4: re view");
+
   const classes = useStyles();
 
-  const [boards, setBoards] = useState(
-    JSON.parse(localStorage.getItem("boards"))
-  );
   const [open, setOpen] = useState(false);
 
   const handleOnCreate = (title) => {
-    const list = boards.slice();
-    list.push({ title: title, id: uuid() });
+    console.log("1: on create");
 
-    localStorage.setItem("boards", JSON.stringify(list));
-
-    setBoards(list);
+    addBoard(title);
   };
 
   const handleDialogClose = () => {
@@ -99,7 +97,7 @@ export default function Boards() {
       />
     </div>
   );
-}
+};
 
 const Board = (props) => {
   const classes = useStyles();
@@ -121,3 +119,12 @@ const Board = (props) => {
     </Card>
   );
 };
+
+const mapStateToProps = (state) => {
+  console.log("3. mapStateToProps");
+
+  const boards = state.boards || {};
+  return boards;
+};
+
+export default connect(mapStateToProps, { addBoard })(Boards);
